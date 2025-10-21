@@ -6,4 +6,5 @@ allure-pytest
 pyautogui
 requests
 webdriver-manager
+pytest-html
 
