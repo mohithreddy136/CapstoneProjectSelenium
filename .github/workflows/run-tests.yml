@@ -1,0 +1,66 @@
+# Name of the GitHub Actions workflow.
+name: Selenium Test Suite
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push events but only for the main branch.
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
+jobs:
+  # This workflow contains a single job called "test".
+  test:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job.
+    steps:
+      # Step 1: Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Sets up a Python environment for use in actions.
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # Specify the Python version you want to use.
+
+      # Step 3: Install all project dependencies from the requirements.txt file.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run the Pytest test suite.
+      # --alluredir generates the raw result data for Allure.
+      # --html generates a simple, self-contained HTML report.
+      # continue-on-error ensures that the reporting steps run even if some tests fail.
+      - name: Run Pytest tests
+        run: pytest --alluredir=allure-results --html=pytest-report.html
+        continue-on-error: true
+
+      # Step 5: Generate the Allure Report from the raw results.
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+
+      # Step 6: Upload the simple Pytest HTML report as an artifact.
+      - name: Upload Pytest HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-html-report
+          path: pytest-report.html
+
+      # Step 7: Upload the full Allure report as an artifact.
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report

@@ -1,0 +1,31 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+class SkincarePage:
+    """
+    Page Object for the Skincare category page.
+    """
+    # --- Locators ---
+    PAGE_HEADER = (By.CSS_SELECTOR, "h1 .maintext")
+    PRODUCT_GRID = (By.CSS_SELECTOR, ".thumbnails.grid.row")
+    PRODUCT_NAMES = (By.CSS_SELECTOR, ".fixed_wrapper .prdocutname")
+
+    # --- Initializer ---
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(self.driver, 10)
+
+    # --- Actions ---
+    def get_header_text(self):
+        """Gets the text of the main page header."""
+        header = self.wait.until(EC.visibility_of_element_located(self.PAGE_HEADER))
+        return header.text
+
+    def get_product_names(self):
+        """Returns a list of all product name elements on the page."""
+        # Wait for the product grid to be visible before looking for products
+        self.wait.until(EC.visibility_of_element_located(self.PRODUCT_GRID))
+        products = self.driver.find_elements(*self.PRODUCT_NAMES)
+        return products
