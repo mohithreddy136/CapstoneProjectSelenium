@@ -20,11 +20,11 @@ jobs:
     steps:
       # Step 1: Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Sets up a Python environment for use in actions.
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10' # Specify the Python version you want to use.
 
@@ -52,15 +52,18 @@ jobs:
           allure_history: allure-history
 
       # Step 6: Upload the simple Pytest HTML report as an artifact.
+      # --- FIX --- Updated from deprecated v3 to v4.
       - name: Upload Pytest HTML Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-html-report
           path: pytest-report.html
 
       # Step 7: Upload the full Allure report as an artifact.
+      # --- FIX --- Updated from deprecated v3 to v4.
       - name: Upload Allure Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
+
