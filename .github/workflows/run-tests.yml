@@ -39,7 +39,7 @@ jobs:
       # --html generates a simple, self-contained HTML report.
       # continue-on-error ensures that the reporting steps run even if some tests fail.
       - name: Run Pytest tests
-        run: pytest tests/test_001_homePage.py --alluredir=allure-results --html=pytest-report.html
+        run: pytest TestCases/test_001_homePage.py --alluredir=allure-results --html=pytest-report.html
         continue-on-error: true
 
       # Step 5: Generate the Allure Report from the raw results.
