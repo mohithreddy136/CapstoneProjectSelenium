@@ -53,7 +53,7 @@ jobs:
     # ✅ Run Pytest with Allure and HTML reporting
     - name: Run Selenium tests on ${{ matrix.browser }}
       run: |
-        pytest TestCases/ \
+        pytest \
           --browser ${{ matrix.browser }} \
           --headless \
           --html=reports/report-${{ matrix.browser }}.html \
