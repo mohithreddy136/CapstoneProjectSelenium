@@ -1,0 +1,4 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_verify_homepage_title

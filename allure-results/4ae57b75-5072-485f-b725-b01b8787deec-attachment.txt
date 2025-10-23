@@ -1,0 +1,11 @@
+
+Executing test: test_add_special_product_to_cart
+Clicked on 'Specials' menu.
+Attempting to add 'ABSOLUE EYE PRECIOUS CELLS' to the cart.
+Clicked 'Add to Cart' for the first special product.
+Verified 'Absolue Eye Precious Cells' is in the shopping cart.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

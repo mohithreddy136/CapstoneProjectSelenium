@@ -1,0 +1,7 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_navigate_and_verify_specials_page
+Clicked on 'Specials' menu.
+Successfully navigated to Specials page with header: 'SPECIAL OFFERS'
+Found 8 products on the page.

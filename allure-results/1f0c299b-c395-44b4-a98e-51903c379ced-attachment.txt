@@ -1,0 +1,13 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_navigate_to_tshirts_subcategory
+Scrolled 'Apparel & Accessories' menu into view.
+Hovered over 'Apparel & Accessories' menu.
+Clicked on 'T-shirts' sub-menu link using JavaScript.
+Successfully navigated to T-shirts page. Breadcrumb: 'Home Apparel & accessories T-shirts'
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

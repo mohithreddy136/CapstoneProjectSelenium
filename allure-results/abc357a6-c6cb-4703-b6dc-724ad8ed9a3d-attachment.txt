@@ -1,0 +1,4 @@
+
+Executing test: test_alert_handling
+Alert text received: 'I am a JS Alert'
+Successfully handled a JS Alert.

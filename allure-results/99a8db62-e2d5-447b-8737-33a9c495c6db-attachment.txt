@@ -1,0 +1,8 @@
+
+Executing test: test_intentional_failure_for_screenshot
+This test will now fail to trigger a screenshot.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

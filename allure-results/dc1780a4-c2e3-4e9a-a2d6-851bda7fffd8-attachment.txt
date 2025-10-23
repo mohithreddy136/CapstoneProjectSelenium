@@ -1,0 +1,11 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_navigate_to_books_page
+Clicked on 'Books' menu.
+Successfully navigated to and verified the Books page.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

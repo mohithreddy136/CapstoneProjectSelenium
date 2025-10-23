@@ -1,0 +1,9 @@
+
+Executing test: test_verify_skincare_products_are_listed
+Clicked on 'Skincare' menu.
+Verified that 5 products are listed on the page.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

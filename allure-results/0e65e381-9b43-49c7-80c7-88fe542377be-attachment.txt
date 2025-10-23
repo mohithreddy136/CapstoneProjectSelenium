@@ -1,0 +1,3 @@
+
+Executing test: test_verify_main_menu_items
+Found main menu items: ['HOME', 'APPAREL & ACCESSORIES', 'MAKEUP', 'SKINCARE', 'FRAGRANCE', 'MEN', 'HAIR CARE', 'BOOKS']

@@ -1,0 +1,9 @@
+
+Executing test: test_verify_products_are_listed
+Clicked on 'Makeup' menu.
+Verified that 6 products are listed on the page.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

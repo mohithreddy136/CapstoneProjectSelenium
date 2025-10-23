@@ -1,0 +1,6 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_navigate_to_skincare_and_verify_header
+Clicked on 'Skincare' menu.
+Successfully navigated to the Skincare page and verified the header.

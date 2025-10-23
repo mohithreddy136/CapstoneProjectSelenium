@@ -1,0 +1,12 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_drag_and_drop_and_right_click
+Switched to the iframe.
+Drag and drop action performed.
+Right-click action performed on the target element.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

@@ -1,0 +1,6 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_navigate_to_fragrance_and_verify_header
+Clicked on 'Fragrance' menu.
+Successfully navigated to the Fragrance page and verified the header.

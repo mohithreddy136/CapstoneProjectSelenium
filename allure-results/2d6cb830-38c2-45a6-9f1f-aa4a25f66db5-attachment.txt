@@ -1,0 +1,7 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_page_navigation
+Scrolled 'Contact Us' link into view.
+Clicked on 'Contact Us' link.
+Successfully navigated to and verified the Contact Us page.

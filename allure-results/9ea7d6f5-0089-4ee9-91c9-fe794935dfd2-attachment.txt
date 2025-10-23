@@ -1,0 +1,9 @@
+
+Executing test: test_search_for_product
+Entered 'lipstick' into search bar.
+Clicked search button.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

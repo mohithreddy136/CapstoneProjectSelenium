@@ -1,0 +1,5 @@
+
+Executing test: test_handle_currency_dropdown
+Hovered over the currency dropdown button.
+Clicked the currency dropdown button.
+Selected currency: Euro

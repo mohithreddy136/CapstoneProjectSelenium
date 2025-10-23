@@ -1,0 +1,11 @@
+
+Setting up the Chrome browser...
+
+Executing test: test_login_with_data for user: testuser1760629898
+Clicked 'Login or register' link.
+Login successful for user: testuser1760629898
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---

@@ -1,0 +1,9 @@
+
+Executing test: test_verify_fragrance_products_are_listed
+Clicked on 'Fragrance' menu.
+Verified that 9 products are listed on the page.
+
+--- Starting Teardown ---
+
+Tearing down the Chrome browser...
+--- Teardown Complete ---
