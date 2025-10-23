@@ -4,6 +4,7 @@ from PageObjects.LoginPage import LoginPage
 from Utilities.ExcelReader import get_data_from_excel
 
 
+
 @pytest.mark.usefixtures("setup_and_teardown")
 class TestLoginDDT:
     # Define the path to the test data
