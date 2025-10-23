@@ -11,10 +11,27 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
-  # This workflow contains a single job called "test".
+  # This workflow contains a job called "test".
   test:
-    # The type of runner that the job will run on.
-    runs-on: ubuntu-latest
+    # --- CHANGE --- Run this job on ubuntu-latest and windows-latest.
+    # We use a strategy matrix to run tests across different browsers and OS.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Do not cancel other jobs if one fails.
+      fail-fast: false
+      matrix:
+        # Define the combinations of OS and browser to test.
+        include:
+          - os: ubuntu-latest
+            browser: chrome
+          - os: ubuntu-latest
+            browser: firefox
+          - os: windows-latest
+            browser: chrome
+          - os: windows-latest
+            browser: firefox
+          - os: windows-latest
+            browser: edge
 
     # Steps represent a sequence of tasks that will be executed as part of the job.
     steps:
@@ -35,32 +52,56 @@ jobs:
           pip install -r requirements.txt
 
       # Step 4: Run the Pytest test suite.
-      # --alluredir generates the raw result data for Allure.
-      # --html generates a simple, self-contained HTML report.
-      # continue-on-error ensures that the reporting steps run even if some tests fail.
+      # --- CHANGE --- Pass the browser from the matrix to pytest.
+      # We also create uniquely named reports for each job.
       - name: Run Pytest tests
-        run: pytest TestCases/test_001_HomePage.py --alluredir=allure-results --html=pytest-report.html
+        run: pytest --browser ${{ matrix.browser }} --alluredir=allure-results-${{ matrix.browser }}-${{ matrix.os }} --html=pytest-report-${{ matrix.browser }}-${{ matrix.os }}.html
         continue-on-error: true
 
-      # Step 5: Generate the Allure Report from the raw results.
+      # Step 5: Upload the simple Pytest HTML report as an artifact.
+      # --- CHANGE --- Use the unique report name.
+      - name: Upload Pytest HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report-${{ matrix.browser }}-${{ matrix.os }}
+          path: pytest-report-${{ matrix.browser }}-${{ matrix.os }}.html
+
+      # Step 6: Upload the Allure results for this job.
+      # --- CHANGE --- Upload the unique Allure results directory.
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}-${{ matrix.os }}
+          path: allure-results-${{ matrix.browser }}-${{ matrix.os }}/
+
+  # This new job, "generate-report", will run only after all "test" jobs are complete.
+  generate-report:
+    # It needs the "test" job to finish, even if tests failed.
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download all the Allure results artifacts from the "test" jobs.
+      - name: Download Allure results
+        uses: actions/download-artifact@v4
+        with:
+          # Download all artifacts that start with "allure-results-"
+          pattern: allure-results-*
+          path: allure-results
+          merge-multiple: true # This automatically merges all downloaded artifacts into one directory
+
+      # Step 2: Generate the final, combined Allure Report.
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         with:
+          # Use the merged results directory
           allure_results: allure-results
           gh_pages: gh-pages
           allure_report: allure-report
           allure_history: allure-history
 
-      # Step 6: Upload the simple Pytest HTML report as an artifact.
-      # --- FIX --- Updated from deprecated v3 to v4.
-      - name: Upload Pytest HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: pytest-html-report
-          path: pytest-report.html
-
-      # Step 7: Upload the full Allure report as an artifact.
-      # --- FIX --- Updated from deprecated v3 to v4.
+      # Step 3: Upload the final, combined Allure Report artifact.
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:

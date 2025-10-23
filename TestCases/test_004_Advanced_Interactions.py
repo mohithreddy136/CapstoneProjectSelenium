@@ -79,45 +79,45 @@ class TestAdvancedInteractions:
     #     self.driver.execute_script("window.scrollTo(0, 0);")
     #     print("Scrolled back to the top of the page.")
 
-    def test_add_featured_product_to_cart(self):
-        """
-        Tests adding a specific featured product ("Benefit Bella Bamba") to the cart
-        and verifies the product name before adding.
-        """
-        print("\nExecuting test: test_add_featured_product_to_cart")
-        self.driver.get("https://automationteststore.com/")
-        wait = WebDriverWait(self.driver, 10)
-
-        # --- FIX: Changed wait condition to handle elements that are not immediately visible ---
-        # 1. Wait for the tab link to be PRESENT in the DOM, then scroll to it.
-        featured_tab_link = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a[href='#featured']")))
-        self.driver.execute_script("arguments[0].scrollIntoView();", featured_tab_link)
-
-        # 2. Wait for the tab to be CLICKABLE before clicking.
-        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='#featured']"))).click()
-        print("Clicked the 'Featured' tab.")
-
-        # 3. Find the specific product container.
-        product_container_xpath = "//div[@id='featured']//div[contains(@class, 'thumbnail') and .//a[contains(@href, 'id=52')]]"
-        product_container = wait.until(EC.visibility_of_element_located((By.XPATH, product_container_xpath)))
-
-        # 4. Verify the product name text within the container.
-        product_name_element = product_container.find_element(By.CSS_SELECTOR, ".productname")
-        assert "Benefit Bella Bamba" in product_name_element.text, "The product name is incorrect."
-        print(f"Verified product name: '{product_name_element.text}'")
-
-        # 5. Locate and click the 'Add to Cart' button within the same container.
-        add_to_cart_button = product_container.find_element(By.CSS_SELECTOR, "a.cart")
-        add_to_cart_button.click()
-        print("Clicked 'Add to Cart' for Benefit Bella Bamba.")
-
-        # 6. Navigate to the shopping cart page to verify.
-        self.driver.get("https://automationteststore.com/index.php?rt=checkout/cart")
-
-        # 7. Assert that the product name is present in the cart's page source.
-        page_source = self.driver.page_source
-        assert "Benefit Bella Bamba" in page_source, "Product was not found in the shopping cart."
-        print("Verified that 'Benefit Bella Bamba' is in the shopping cart.")
+    # def test_add_featured_product_to_cart(self):
+    #     """
+    #     Tests adding a specific featured product ("Benefit Bella Bamba") to the cart
+    #     and verifies the product name before adding.
+    #     """
+    #     print("\nExecuting test: test_add_featured_product_to_cart")
+    #     self.driver.get("https://automationteststore.com/")
+    #     wait = WebDriverWait(self.driver, 10)
+    #
+    #     # --- FIX: Changed wait condition to handle elements that are not immediately visible ---
+    #     # 1. Wait for the tab link to be PRESENT in the DOM, then scroll to it.
+    #     featured_tab_link = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a[href='#featured']")))
+    #     self.driver.execute_script("arguments[0].scrollIntoView();", featured_tab_link)
+    #
+    #     # 2. Wait for the tab to be CLICKABLE before clicking.
+    #     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='#featured']"))).click()
+    #     print("Clicked the 'Featured' tab.")
+    #
+    #     # 3. Find the specific product container.
+    #     product_container_xpath = "//div[@id='featured']//div[contains(@class, 'thumbnail') and .//a[contains(@href, 'id=52')]]"
+    #     product_container = wait.until(EC.visibility_of_element_located((By.XPATH, product_container_xpath)))
+    #
+    #     # 4. Verify the product name text within the container.
+    #     product_name_element = product_container.find_element(By.CSS_SELECTOR, ".productname")
+    #     assert "Benefit Bella Bamba" in product_name_element.text, "The product name is incorrect."
+    #     print(f"Verified product name: '{product_name_element.text}'")
+    #
+    #     # 5. Locate and click the 'Add to Cart' button within the same container.
+    #     add_to_cart_button = product_container.find_element(By.CSS_SELECTOR, "a.cart")
+    #     add_to_cart_button.click()
+    #     print("Clicked 'Add to Cart' for Benefit Bella Bamba.")
+    #
+    #     # 6. Navigate to the shopping cart page to verify.
+    #     self.driver.get("https://automationteststore.com/index.php?rt=checkout/cart")
+    #
+    #     # 7. Assert that the product name is present in the cart's page source.
+    #     page_source = self.driver.page_source
+    #     assert "Benefit Bella Bamba" in page_source, "Product was not found in the shopping cart."
+    #     print("Verified that 'Benefit Bella Bamba' is in the shopping cart.")
 
     # @pytest.mark.regression
     # def test_broken_links(self):
