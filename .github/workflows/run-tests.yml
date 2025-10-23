@@ -1,91 +1,91 @@
-name: Selenium Test Suite
+name: Run Selenium Tests with Allure and HTML Report
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            browser: chrome
-          - os: ubuntu-latest
-            browser: firefox
-          - os: windows-latest
-            browser: chrome
-          - os: windows-latest
-            browser: firefox
-          - os: windows-latest
-            browser: edge
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install allure-pytest
-
-      - name: Run Pytest tests
-        run: |
-          pytest --browser ${{ matrix.browser }} \
-                 --alluredir=allure-results-${{ matrix.browser }}-${{ matrix.os }} \
-                 --html=pytest-report-${{ matrix.browser }}-${{ matrix.os }}.html
-        continue-on-error: true
-
-      - name: Upload Pytest HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: pytest-html-report-${{ matrix.browser }}-${{ matrix.os }}
-          path: pytest-report-${{ matrix.browser }}-${{ matrix.os }}.html
-
-      - name: Upload Allure Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-${{ matrix.browser }}-${{ matrix.os }}
-          path: allure-results-${{ matrix.browser }}-${{ matrix.os }}/
-
-  generate-report:
-    needs: test
-    if: always()
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        browser: [chrome, edge]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Install Allure CLI
-        run: |
-          sudo apt-add-repository ppa:qameta/allure
-          sudo apt-get update
-          sudo apt-get install allure -y
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Download Allure results
-        uses: actions/download-artifact@v4
-        with:
-          pattern: allure-results-*
-          path: allure-results
-          merge-multiple: true
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-html allure-pytest
 
-      - name: Generate Allure Report
-        run: |
-          allure generate allure-results -o allure-report --clean
-          allure open allure-report &
+    # ✅ Set up Chrome if browser is chrome
+    - name: Set up Chrome
+      if: matrix.browser == 'chrome'
+      uses: browser-actions/setup-chrome@v1
 
-      - name: Upload Allure Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
+    # ✅ Set up Edge if browser is edge
+    - name: Set up Edge
+      if: matrix.browser == 'edge'
+      uses: browser-actions/setup-edge@v1
+      with:
+        edge-version: stable
+
+    # ✅ Verify browser version
+    - name: Verify Browser Version
+      run: |
+        if [ "${{ matrix.browser }}" == "chrome" ]; then
+          google-chrome --version
+        elif [ "${{ matrix.browser }}" == "edge" ]; then
+          microsoft-edge --version
+        fi
+
+    # ✅ Run Pytest with Allure and HTML reporting
+    - name: Run Selenium tests on ${{ matrix.browser }}
+      run: |
+        pytest TestCases/ \
+          --browser ${{ matrix.browser }} \
+          --headless \
+          --html=reports/report-${{ matrix.browser }}.html \
+          --self-contained-html \
+          --alluredir=reports/allure-results-${{ matrix.browser }}
+
+    # ✅ Download and setup Allure CLI
+    - name: Download Allure CLI
+      run: |
+        ALLURE_VERSION=2.30.0
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/${ALLURE_VERSION}/allure-commandline-${ALLURE_VERSION}.tgz -O allure.tgz
+        tar -zxvf allure.tgz
+        sudo mv allure-${ALLURE_VERSION} /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+        allure --version
+
+    # ✅ Generate Allure report
+    - name: Generate Allure Report
+      run: |
+        allure generate reports/allure-results-${{ matrix.browser }} \
+          -o reports/allure-report-${{ matrix.browser }} --clean
+
+    # ✅ Upload Pytest HTML Report
+    - name: Upload Pytest HTML Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: pytest-html-report-${{ matrix.browser }}
+        path: reports/report-${{ matrix.browser }}.html
+
+    # ✅ Upload Allure Report
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report-${{ matrix.browser }}
+        path: reports/allure-report-${{ matrix.browser }}
